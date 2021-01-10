@@ -1,0 +1,259 @@
+<!DOCTYPE HTML>
+<!--
+	Twenty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Twenty by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename= 'assets/css/main.css') }}" />
+	</head>
+	<body class="index is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<header id="header" class="alt">
+					<h1 id="logo"><a href="index.html">Twenty <span>by HTML5 UP</span></a></h1>
+
+				</header>
+
+			<!-- Banner -->
+				<section id="banner">
+
+					<!--
+						".inner" is set up as an inline-block so it automatically expands
+						in both directions to fit whatever's inside it. This means it won't
+						automatically wrap lines, so be sure to use line breaks where
+						appropriate (<br />).
+					-->
+					<div class="inner">
+
+						<header>
+							<h2>Spammy 90's</h2>
+						</header>
+
+						<p>Je vous présente <strong>Spammy</strong>, une petite IA
+						<br />
+						vous permettant de détecter si le mail que
+						<br />
+						vous venez de recevoir est un spam...
+						<br />
+						pour l'année <strong>1999</strong>.
+						<footer>
+							<ul class="buttons stacked">
+								<li><a href="#main" class="button fit scrolly">Quoi ? Je veux plus de détails !</a></li>
+							</ul>
+						</footer>
+
+					</div>
+
+				</section>
+
+			<!-- Main -->
+				<article id="main">
+
+					<header class="special container">
+						<span class="icon solid fa-mail-bulk"></span>
+						<h2>Environ <strong>293.6 billions</strong> de mails
+						<br />
+						étaient envoyés par jour en 2019.</h2>
+						Eh oui, ça fait <a href="https://info.templafy.com/blog/how-many-emails-are-sent-every-day-top-email-statistics-your-business-needs-to-know">beaucoup</a> !
+						<br />
+						<br />
+						<p>Un employé peut recevoir une grande quantité de mails par jour,
+						<br />
+						entre les mails personnels et professionnels. Et tout le monde n'a pas
+						<br />
+						forcément le réflexe de se méfier de mails paraissant un peu suspect (mais pas trop).
+						</p>
+					</header>
+
+
+
+					<!-- One -->
+						<section class="wrapper style2 container special-alt">
+							<div class="row gtr-50">
+								<div style="text-align: center">
+
+									<header>
+										<h2>Entrez votre texte ici pour savoir si c'est un mail ou un spam.</h2>
+									</header>
+									<!--<form method = "POST", action = "{{url_for('prediction')}}">-->
+										<textarea id="mail" style="background-color:white;color:black;" rows ="12" cols ="60" name ="mail" placeholder ="ex: Bonjour, comment allez-vous ?..."></textarea>
+										<footer style="justify-content: center;">
+											<br>
+											<ul class="buttons">
+												<!--<input class="btn" type="submit" value="Lancer l'analyse">-->
+												<button onclick="predictMail()">Click me</button>
+											</ul>
+										</footer>
+									<!--</form>-->
+
+								</div>
+							</div>
+						</section>
+
+
+				</article>
+
+
+			<!-- Footer -->
+				<footer id="footer">
+
+					<ul class="icons">
+						<li><a href="https://github.com/AydenOwl/spambase_dataset" class="icon brands circle fa-github"><span class="label">Github</span></a></li>
+					</ul>
+
+					<ul class="copyright">
+						<li>&copy;Spammy 90's</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+
+				</footer>
+
+		</div>
+
+		<!-- Scripts -->
+			<script src="../static/assets/js/jquery.min.js"></script>
+			<script src="../static/assets/js/jquery.dropotron.min.js"></script>
+			<script src="../static/assets/js/jquery.scrolly.min.js"></script>
+			<script src="../static/assets/js/jquery.scrollex.min.js"></script>
+			<script src="../static/assets/js/browser.min.js"></script>
+			<script src="../static/assets/js/breakpoints.min.js"></script>
+			<script src="../static/assets/js/util.js"></script>
+			<script src="../static/assets/js/main.js"></script>
+			<script>
+				async function predictMail (){
+					// Définition du tableau
+					let tab_attributes = [];
+
+					// Récupération du mail
+					const mail = document.getElementById("mail").value;
+
+					// Définition des mots et caractères
+					const words = [
+						'make',
+						'address',
+						'all',
+						'3d',
+						'our',
+						'over',
+						'remove',
+						'internet',
+						'order',
+						'mail',
+						'receive',
+						'will',
+						'people',
+						'report',
+						'addresses',
+						'free',
+						'business',
+						'email',
+						'you',
+						'credit',
+						'your',
+						'font',
+						'000',
+						'money',
+						'hp',
+						'hpl',
+						'george',
+						'650',
+						'lab',
+						'labs',
+						'telnet',
+						'857',
+						'data',
+						'415',
+						'85',
+						'technology',
+						'1999',
+						'parts',
+						'pm',
+						'direct',
+						'cs',
+						'meeting',
+						'original',
+						'project',
+						're',
+						'edu',
+						'table',
+						'conference'
+					];
+					const characters = [';', '(', '[', '!', '$', '#'];
+
+					// Récupération du nombre total de mots dans le mail
+					let nbWords = mail.split(' ').length;
+
+					// Récupération de la fréquence pour chaque mot
+					words.forEach(word => {
+						let reg = new RegExp(word + ' ', 'g');
+						if(mail.match(reg)) {
+							tab_attributes.push(100 * mail.match(reg).length / nbWords);
+						}
+						else {
+							tab_attributes.push(0);
+						}
+					});
+
+					// Récupération de la fréquence pour chaque caractère
+					characters.forEach(character => {
+						let reg = new RegExp('\\' + character, 'g');
+						if(mail.match(reg)){
+							tab_attributes.push(100 * mail.match(reg).length / mail.length);
+						}
+						else {
+							tab_attributes.push(0);
+						}
+
+					});
+
+
+					// Récupération des séquences en majuscules
+					let allUpperSequences = mail.match(/[A-Z]+/g);
+
+					if (allUpperSequences){
+						// Récupération de la plus grande séquence de majuscule
+						let maxLengthUpperSequences = Math.max(...allUpperSequences
+								.map(sequence => sequence.length));
+						tab_attributes.push(maxLengthUpperSequences);
+
+						// Récupération de la moyenne de la longueur des séquences en majuscules
+						let avgLengthUpperSequences = allUpperSequences
+								.map(sequence => sequence.length)
+								.reduce((accumulator, currentValue) => accumulator + currentValue) / allUpperSequences.length;
+						tab_attributes.push(avgLengthUpperSequences);
+
+						// Récupération du nombre total de majuscules
+						let numUpper = (mail.match(/[A-Z]/g) || []).length;
+						tab_attributes.push((numUpper));
+					}
+					else {
+						tab_attributes.push(0);
+						tab_attributes.push(0);
+						//tab_attributes.push(0);
+					}
+
+					// Envoi de la requête
+					await $.ajax({
+						type: "POST",
+						url: "http://localhost:5000/prediction", //localhost Flask
+						data : JSON.stringify(tab_attributes),
+						contentType: "application/json",
+						success: function(data, textStatus, jqXHR){
+							if(jqXHR.status === 200){
+								alert('Spammy pense que vous avez affaire à un... ' + data + '!');
+							}
+						},
+					  error: function(jqXHR, textStatus, errorThrown){
+						alert('Veuillez vérifier que votre tableau contient bien 57 valeurs.');
+					  }
+					});
+				}
+			</script>
+
+	</body>
+</html>
